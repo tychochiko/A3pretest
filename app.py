@@ -273,7 +273,7 @@ else:
         st.session_state.confirm_no_change = False
 
         # 准备写入
-        timestamp = datetime.datetime.now().isoformat()
+        timestamp = datetime.datetime.utcnow().isoformat() + "Z"
 
         if edited_text.strip() == original_text.strip():
             no_change_confirmed = 1
@@ -331,23 +331,40 @@ import glob
 import zipfile
 import io
 
+# =========================
+# 管理员数据下载区
+# =========================
+
+ADMIN_PASSWORD = "411222"  
+
 st.divider()
-st.write("管理员下载全部实验数据")
 
-files = glob.glob("data/*.csv")
+admin_input = st.text_input("管理员入口", type="password")
 
-if files:
-    zip_buffer = io.BytesIO()
+if admin_input == ADMIN_PASSWORD:
 
-    with zipfile.ZipFile(zip_buffer, "w") as z:
-        for f in files:
-            z.write(f)
+    import glob
+    import zipfile
+    import io
 
-    st.download_button(
-        label="下载全部数据 (ZIP)",
-        data=zip_buffer.getvalue(),
-        file_name="experiment_data.zip",
-        mime="application/zip"
-    )
-else:
-    st.write("目前还没有数据")
+    files = glob.glob("data/*.csv")
+
+    st.write("当前已收集参与者数量：", len(files))
+
+    if files:
+
+        zip_buffer = io.BytesIO()
+
+        with zipfile.ZipFile(zip_buffer, "w") as z:
+            for f in files:
+                z.write(f)
+
+        st.download_button(
+            label="下载全部实验数据 (ZIP)",
+            data=zip_buffer.getvalue(),
+            file_name="experiment_data.zip",
+            mime="application/zip"
+        )
+
+    else:
+        st.write("目前还没有数据"))
