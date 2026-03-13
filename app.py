@@ -291,6 +291,7 @@ else:
         file_exists = os.path.isfile(file_path)
 
         with open(file_path, mode="a", newline="", encoding="utf-8-sig") as file:
+            writer = csv.writer(file)
 
             if not file_exists:
                 writer.writerow([
