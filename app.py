@@ -6,6 +6,7 @@ import datetime
 import uuid
 from zhipuai import ZhipuAI
 
+os.makedirs("data", exist_ok=True)
 # 临时测试路径
 st.write(os.getcwd())
 st.write(os.listdir("data"))
@@ -290,7 +291,7 @@ else:
         os.makedirs(data_dir, exist_ok=True)
 
         # 每个参与者一个独立文件
-        file_path = f"{data_dir}/{st.session_state.participant_id}.csv"
+        file_path = f"data/{st.session_state.participant_id}.csv"
 
         file_exists = os.path.isfile(file_path)
 
