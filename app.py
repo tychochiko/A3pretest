@@ -7,9 +7,6 @@ import uuid
 from zhipuai import ZhipuAI
 
 os.makedirs("data", exist_ok=True)
-# 临时测试路径
-st.write(os.getcwd())
-st.write(os.listdir("data"))
 
 # =========================
 # API 设置
@@ -329,3 +326,28 @@ else:
 
         st.session_state.round += 1
         st.rerun()
+
+import glob
+import zipfile
+import io
+
+st.divider()
+st.write("管理员下载全部实验数据")
+
+files = glob.glob("data/*.csv")
+
+if files:
+    zip_buffer = io.BytesIO()
+
+    with zipfile.ZipFile(zip_buffer, "w") as z:
+        for f in files:
+            z.write(f)
+
+    st.download_button(
+        label="下载全部数据 (ZIP)",
+        data=zip_buffer.getvalue(),
+        file_name="experiment_data.zip",
+        mime="application/zip"
+    )
+else:
+    st.write("目前还没有数据")
