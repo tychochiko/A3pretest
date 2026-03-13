@@ -281,10 +281,16 @@ else:
         ai_text = original_text
 
         # 写入
-        file_exists = os.path.isfile("data.csv")
+        # 确保 data 文件夹存在
+        data_dir = "data"
+        os.makedirs(data_dir, exist_ok=True)
 
-        with open("data.csv", mode="a", newline="", encoding="utf-8-sig") as file:
-            writer = csv.writer(file)
+        # 每个参与者一个独立文件
+        file_path = f"{data_dir}/{st.session_state.participant_id}.csv"
+
+        file_exists = os.path.isfile(file_path)
+
+        with open(file_path, mode="a", newline="", encoding="utf-8-sig") as file:
 
             if not file_exists:
                 writer.writerow([
