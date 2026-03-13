@@ -367,4 +367,4 @@ if admin_input == ADMIN_PASSWORD:
         )
 
     else:
-        st.write("目前还没有数据"))
+        st.write("目前还没有数据")
