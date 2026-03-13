@@ -6,6 +6,10 @@ import datetime
 import uuid
 from zhipuai import ZhipuAI
 
+# 临时测试路径
+st.write(os.getcwd())
+st.write(os.listdir("data"))
+
 # =========================
 # API 设置
 # =========================
