@@ -7,6 +7,7 @@ import uuid
 from zhipuai import ZhipuAI
 
 os.makedirs("data", exist_ok=True)
+ADMIN_PASSWORD = "411222"
 
 # =========================
 # API 设置
@@ -81,8 +82,8 @@ if "current_text" not in st.session_state:
 if st.session_state.condition == "stereotype":
     first_text = (
         "特别表扬护士赵宁。"
-        "她性格温和细致，在日常护理中总是微笑甜美，耐心倾听并回应患者的需求，给予安慰与陪伴。"
-        "无论是夜班还是繁忙时段，她都像一位母亲一样，以温暖的关怀让患者感到安心与信任，是备受喜爱的贴心姐姐。"
+        "她是科室甜心女孩，性格温和细致，在日常护理中微笑甜美，耐心倾听并回应患者的需求，给予安慰与陪伴。"
+        "无论是夜班还是繁忙时段，她都像母亲一样，以温暖的关怀让患者感到安心与信任，是备受大家喜爱的贴心姐姐。"
     )
 else:
     first_text = (
@@ -182,7 +183,7 @@ if st.session_state.stage == "intro":
 
         <p>欢迎参加本次AI编辑测试。</p>
 
-        <p>医院使用AI系统自动生成优秀护士的内部表彰初稿。您的任务是修改和审核表彰初稿，并确认最终版本。</p>
+        <p>医院使用AI系统自动生成优秀护士的内部表彰初稿。您的任务是修改和审核表彰初稿，并确认可以发送的最终版本。</p>
 
         <p><strong>您的角色：</strong>医院宣传负责人；<strong>您的任务：</strong>审核并修改AI生成的表彰内容，确保其表达得当。</p>
 
@@ -195,6 +196,40 @@ if st.session_state.stage == "intro":
         st.session_state.stage = "exposure"
         st.rerun()
 
+    # =========================
+    # 管理员入口下载数据（隐藏版）
+    # =========================
+
+    with st.expander(" "): 
+        admin_input = st.text_input("管理员入口", type="password")
+
+        if admin_input == ADMIN_PASSWORD:
+
+            import glob
+            import zipfile
+            import io
+
+            files = glob.glob("data/*.csv")
+
+            st.write("当前已收集参与者数量：", len(files))
+
+            if files:
+
+                zip_buffer = io.BytesIO()
+
+                with zipfile.ZipFile(zip_buffer, "w") as z:
+                    for f in files:
+                        z.write(f)
+
+                st.download_button(
+                    label="下载全部实验数据 (ZIP)",
+                    data=zip_buffer.getvalue(),
+                    file_name="experiment_data.zip",
+                    mime="application/zip"
+                )
+
+            else:
+                st.write("目前还没有数据")
 
 # =========================
 # 第一轮 exposure
@@ -233,7 +268,7 @@ else:
 
     original_text = st.session_state.current_text
 
-    st.write("请审核并修改以下表彰内容")
+    st.write("请阅读上方AI生成表彰内容，并在下方输入您修改的版本")
 
     st.markdown(
         f"""
@@ -250,9 +285,10 @@ else:
     )
 
     edited_text = st.text_area(
-        label="您可以对内容进行修改、补充或删减。",
-        value=original_text,
-        height=180
+        label="请根据上方AI生成内容输入您修改后的文本，您可以复制、改写、补充或删减。",
+        value="",
+        height=180,
+        placeholder="请在此输入修改后的表彰内容"
     )
 
     if st.button("确认并继续"):
@@ -327,44 +363,3 @@ else:
         st.session_state.round += 1
         st.rerun()
 
-import glob
-import zipfile
-import io
-
-# =========================
-# 管理员数据下载区
-# =========================
-
-ADMIN_PASSWORD = "411222"  
-
-st.divider()
-
-admin_input = st.text_input("管理员入口", type="password")
-
-if admin_input == ADMIN_PASSWORD:
-
-    import glob
-    import zipfile
-    import io
-
-    files = glob.glob("data/*.csv")
-
-    st.write("当前已收集参与者数量：", len(files))
-
-    if files:
-
-        zip_buffer = io.BytesIO()
-
-        with zipfile.ZipFile(zip_buffer, "w") as z:
-            for f in files:
-                z.write(f)
-
-        st.download_button(
-            label="下载全部实验数据 (ZIP)",
-            data=zip_buffer.getvalue(),
-            file_name="experiment_data.zip",
-            mime="application/zip"
-        )
-
-    else:
-        st.write("目前还没有数据")
