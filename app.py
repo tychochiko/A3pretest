@@ -136,7 +136,23 @@ if current_round > 6:
     # 第二步：感谢语 + 问卷链接
     else:
 
-        st.write("感谢您的参与。请点击下方链接完成后续问卷。")
+        st.write("感谢您的参与。请再次确认已复制您的参与编号。")
+
+        st.write("您的参与编号如下：")
+
+        st.markdown(
+            f"""
+            <div style="
+                font-size:18px;
+                font-weight:bold;
+                margin:10px 0;">
+            {st.session_state.participant_id}
+            </div>
+            """,
+            unsafe_allow_html=True
+        )
+
+        st.write("请点击下方链接完成后续问卷。")
 
         survey_link = "https://wj.qq.com/s2/25959280/5910/"
 
@@ -288,7 +304,8 @@ else:
         label="请根据上方AI生成内容输入您修改后的文本，您可以复制、改写、补充或删减。",
         value="",
         height=180,
-        placeholder="请在此输入修改后的表彰内容"
+        placeholder="请在此输入修改后的表彰内容",
+        key=f"edit_{current_round}"
     )
 
     if st.button("确认并继续"):
