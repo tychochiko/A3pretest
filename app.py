@@ -57,7 +57,7 @@ st.title("医院内部表彰信息编辑系统")
 # =========================
 
 if "condition" not in st.session_state:
-    st.session_state.condition = random.choice(["stereotype", "counter"])
+    st.session_state.condition = random.choice(["stereotype", "non"])
 
 if "round" not in st.session_state:
     st.session_state.round = 1
@@ -88,7 +88,7 @@ if st.session_state.condition == "stereotype":
 else:
     first_text = (
         "特别表扬护士赵宁。"
-        "赵宁业务能力扎实，熟练掌握各项临床操作流程，在突发情况中能够迅速判断并准确执行处置方案。"
+        "赵宁业务能力扎实，熟练掌握各项临床操作流程，在突发情况中能够迅速判断并准确执行处置方案，保障护理工作顺利推进。"
         "赵宁注重规范管理与团队协作，多次在复杂病例处理中发挥关键作用，是科室稳定运行的重要力量。"
     )
 
@@ -168,13 +168,29 @@ if st.session_state.stage == "consent":
 
     st.markdown(
         """
-        <div style="line-height:1.5; font-size:16px;">
+        <div style="line-height:1.6; font-size:16px;">
 
-        <p>欢迎参与本次在线任务。本任务围绕测试中的人工智能（AI）生成系统展开，您将以医院宣传负责人的身份，对AI生成的内部表彰初稿进行审核与修改。</p>
+        <h3>知情同意</h3>
 
-        <p>整个过程约需8–10分钟。任务不涉及任何风险或敏感内容。所有数据将匿名记录，仅用于研究分析。</p>
+        <p>欢迎参与本次在线研究。本研究关注AI辅助写作过程。您将以医院宣传负责人的身份，
+        对AI生成的内部表彰初稿进行阅读、审核与修改，并在任务结束后填写简短问卷。</p>
 
-        <p>您可以在任何时间退出任务，退出不会产生任何不良影响。</p>
+        <p>整个过程预计约需8–10分钟。参与本研究完全自愿，您可以在任何时候退出任务；
+        退出不会产生任何惩罚或不良影响。</p>
+
+        <p>本研究不会收集您的姓名等直接身份识别信息。
+        系统将记录您的文本编辑内容、任务完成情况、完成时间及必要的基本人口统计信息。
+        所有数据将以匿名或研究编号形式保存，仅用于学术研究分析，研究结果将以汇总形式呈现。</p>
+
+        <p>为避免影响研究结果，本研究在开始前不会完全说明所有具体研究目的。
+        任务结束后，页面将向您说明研究的完整目的。了解完整目的后，如您不希望自己的数据继续用于研究，
+        可以联系研究者撤回数据。</p>
+
+        <p>如您对本研究有任何问题，或希望撤回数据，可联系研究者：
+        <strong>pluo22@m.fudan.edu.cn</strong>。</p>
+
+        <p>点击下方按钮即表示您已年满18岁，能够熟练阅读和书写中文，已阅读并理解以上说明，
+        并自愿参加本研究。</p>
 
         </div>
         """,
@@ -182,6 +198,7 @@ if st.session_state.stage == "consent":
     )
 
     if st.button("我已阅读并同意参与"):
+        st.session_state.consent_given = True
         st.session_state.stage = "intro"
         st.rerun()
 
@@ -379,4 +396,3 @@ else:
 
         st.session_state.round += 1
         st.rerun()
-
