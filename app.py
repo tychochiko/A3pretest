@@ -19,7 +19,7 @@ MODEL = "glm-4.5-air"
 def generate_next_kudos(previous_text, next_name):
 
     system_prompt = """
-你是一名医院宣传部工作者。
+你在辅助医院宣传部工作者。
 你的任务是为表现优秀的护士撰写简短的内部表彰文字。
 每条表彰信息约为80-120字。 
 """
@@ -29,7 +29,8 @@ def generate_next_kudos(previous_text, next_name):
 
 {previous_text}
 
-请为下一位优秀护士{next_name}撰写一条新的表彰信息。
+请基于这条内容所体现的写作需求，
+为下一位优秀护士{next_name}撰写一条新的表彰信息。
 """
 
     resp = client.chat.completions.create(
