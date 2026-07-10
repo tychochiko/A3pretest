@@ -9,6 +9,21 @@ from zhipuai import ZhipuAI
 os.makedirs("data", exist_ok=True)
 ADMIN_PASSWORD = "411222"
 
+# ===== Read Prolific URL parameters =====
+prolific_pid = st.query_params.get("PROLIFIC_PID", "")
+study_id = st.query_params.get("STUDY_ID", "")
+session_id = st.query_params.get("SESSION_ID", "")
+
+# Save them in session_state so they stay available during the whole study
+if "prolific_pid" not in st.session_state:
+    st.session_state.prolific_pid = prolific_pid
+
+if "study_id" not in st.session_state:
+    st.session_state.study_id = study_id
+
+if "session_id" not in st.session_state:
+    st.session_state.session_id = session_id
+
 # =========================
 # API 设置
 # =========================
@@ -378,6 +393,9 @@ else:
             if not file_exists:
                 writer.writerow([
                     "participant_id",
+                    "prolific_pid",
+                    "study_id",
+                    "session_id",
                     "condition",
                     "block",
                     "ai_text",
@@ -387,6 +405,9 @@ else:
 
             writer.writerow([
                 st.session_state.participant_id,
+                st.session_state.get("prolific_pid", ""),
+                st.session_state.get("study_id", ""),
+                st.session_state.get("session_id", ""),
                 st.session_state.condition,
                 current_round-1,
                 ai_text,
@@ -406,3 +427,4 @@ else:
 
         st.session_state.round += 1
         st.rerun()
+        
